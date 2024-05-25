@@ -7,4 +7,5 @@ Route::get('/', function () {
     return view('products.index');
 });
 
+// Routes for product operations
 Route::resource('products', ProductController::class);

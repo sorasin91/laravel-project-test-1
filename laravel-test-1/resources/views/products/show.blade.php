@@ -1,5 +1,7 @@
 @extends('pages.layouts.app')
 
+@section('title', 'Show Product')
+
 @section('content')
 <h2 class="text-center my-4">View</h2>
     <div class="card mx-auto" style="width: 50%;">

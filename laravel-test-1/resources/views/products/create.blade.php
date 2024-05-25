@@ -1,5 +1,7 @@
 @extends('pages.layouts.app')
 
+@section('title', 'Create product')
+
 @section('content')
 <div class="container">
     <h2>Add New Product</h2>
@@ -7,15 +9,15 @@
         @csrf
         <div class="form-group">
             <label for="name">Name:</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <input type="text" class="form-control" id="name" name="name"  placeholder="Name" required>
         </div>
         <div class="form-group">
             <label for="price">Price (RM):</label>
-            <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+            <input type="number" step="0.01" class="form-control" id="price" name="price" placeholder="99.99" required>
         </div>
         <div class="form-group">
             <label for="details">Detail:</label>
-            <textarea class="form-control" id="details" name="details" rows="3" required></textarea>
+            <textarea class="form-control" id="details" name="details" rows="3" placeholder="Description" required></textarea>
         </div>
         <div class="form-group">
             <label>Publish:</label><br>
