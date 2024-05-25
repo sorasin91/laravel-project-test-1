@@ -54,13 +54,15 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
-    public function show(Product $product)
+    public function show($id)
     {
+        $product = Product::findOrFail($id);
         return view('products.show', compact('product'));
     }
 
-    public function edit(Product $product)
+    public function edit($id)
     {
+        $product = Product::findOrFail($id);
         return view('products.edit', compact('product'));
     }
 
@@ -70,9 +72,11 @@ class ProductController extends Controller
         return redirect()->route('products.index');
     }
 
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        $product->delete();
-        return redirect()->route('products.index');
+    $product = Product::findOrFail($id);
+    $product->delete();
+
+    return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 }
