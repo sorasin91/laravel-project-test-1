@@ -9,9 +9,30 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
-        return view('products.index', compact('products'));
-        
+        if (request()->ajax()) {
+            return datatables()->of(Product::query())
+                ->addColumn('publish', function($row){
+                    return $row->publish ? 'Yes' : 'No';
+                })
+                ->addColumn('action', function($row){
+                    $showUrl = route('products.show', $row->id);
+                    $editUrl = route('products.edit', $row->id);
+                    $deleteUrl = route('products.destroy', $row->id);
+                    $csrfField = csrf_field();
+                    $methodField = method_field('DELETE');
+                    
+                    return '<a href="'.$showUrl.'" class="btn btn-primary">Show</a>
+                            <a href="'.$editUrl.'" class="btn btn-info">Edit</a>
+                            <form action="'.$deleteUrl.'" method="POST" style="display:inline;">
+                                '.$csrfField.'
+                                '.$methodField.'
+                                <button type="submit" class="btn btn-danger" onclick="return confirm(\'Are you sure?\')">Delete</button>
+                            </form>';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('products.index');
     }
 
     public function create()
@@ -21,8 +42,16 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $product = Product::create($request->all());
-        return redirect()->route('products.index');
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'details' => 'required|string',
+            'publish' => 'required|boolean',
+        ]);
+    
+        Product::create($request->all());
+    
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
     public function show(Product $product)
